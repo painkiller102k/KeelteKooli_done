@@ -1,0 +1,95 @@
+﻿@model KeelteKooli.Models.IndexViewModel
+@{
+    ViewBag.Title = "Halda kontot";
+}
+
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+
+    <p class="text-success">@ViewBag.StatusMessage</p>
+    <div>
+        <h4>Muuda konto seadeid</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>Parool:</dt>
+            <dd>
+                [
+                @if (Model.HasPassword)
+                {
+                    @Html.ActionLink("Muuda parooli", "ChangePassword")
+                }
+                else
+                {
+                    @Html.ActionLink("Loo parool", "SetPassword")
+                }
+                ]
+            </dd>
+
+            <dt>Välised sisselogimised:</dt>
+            <dd>
+                @Model.Logins.Count [
+                @Html.ActionLink("Halda", "ManageLogins") ]
+            </dd>
+
+            @*
+                Telefoninumbreid saab kasutada teise faktorina kahefaktorilise autentimise süsteemis.
+
+                Vaata <a href="https://go.microsoft.com/fwlink/?LinkId=403804">seda artiklit</a>,
+                et seadistada see ASP.NET rakendus toetama kahefaktorilist autentimist SMS-i abil.
+
+                Eemalda kommentaarid allolevast plokist pärast kahefaktorilise autentimise seadistamist.
+            *@
+            @*
+                <dt>Telefoninumber:</dt>
+                <dd>
+                    @(Model.PhoneNumber ?? "Puudub")
+                    @if (Model.PhoneNumber != null)
+                    {
+                        <br />
+                        <text>[&nbsp;&nbsp;@Html.ActionLink("Muuda", "AddPhoneNumber")&nbsp;&nbsp;]</text>
+                        using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <text>[<input type="submit" value="Eemalda" class="btn-link" />]</text>
+                        }
+                    }
+                    else
+                    {
+                        <text>[&nbsp;&nbsp;@Html.ActionLink("Lisa", "AddPhoneNumber")</text>
+                    }
+                </dd>
+            *@
+
+            <dt>Kahefaktoriline autentimine:</dt>
+            <dd>
+                <p>
+                    Kahefaktorilise autentimise pakkujaid ei ole seadistatud. Vaata <a href="https://go.microsoft.com/fwlink/?LinkId=403804">seda artiklit</a>,
+                    et seadistada see ASP.NET rakendus toetama kahefaktorilist autentimist.
+                </p>
+
+                @*
+                    @if (Model.TwoFactor)
+                    {
+                        using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <text>Lubatud
+                            <input type="submit" value="Keela" class="btn btn-link" />
+                            </text>
+                        }
+                    }
+                    else
+                    {
+                        using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <text>Keelatud
+                            <input type="submit" value="Luba" class="btn btn-link" />
+                            </text>
+                        }
+                    }
+                *@
+            </dd>
+        </dl>
+    </div>
+</main>

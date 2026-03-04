@@ -1,0 +1,51 @@
+﻿@model IEnumerable<KeelteKooli.Models.Training>
+@{
+    ViewBag.Title = "Töölaud";
+}
+
+<h2>Minu koolitused</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">Sul ei ole veel ühtegi koolitust.</div>
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Kursus</th>
+                <th>Algus</th>
+                <th>Lõpp</th>
+                <th>Hind</th>
+                <th>Maks. osalejaid</th>
+                <th>Tegevused</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in Model)
+            {
+                <tr>
+                    <td>@(t.Keelekursus != null ? t.Keelekursus.Nimetus : "-")</td>
+                    <td>@t.AlgusKuupaev.ToString("dd.MM.yyyy")</td>
+                    <td>@t.LoppKuupaev.ToString("dd.MM.yyyy")</td>
+                    <td>@t.Hind</td>
+                    <td>@t.MaxOsalejaid</td>
+                    <td>
+                        @if (t.Id > 0)
+                        {
+                            <a class="btn btn-sm btn-info"
+                               href="@Url.Action("Students", "Opetaja", new { id = t.Id })">
+                                Õpilased
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">ID puudub</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,34 @@
+﻿@model KeelteKooli.Models.Teacher
+@{
+    ViewBag.Title = "Loo õpetaja";
+}
+
+<h2>Loo õpetaja</h2>
+
+@using (Html.BeginForm("CreateTeacher", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Nimi, "Nimi")
+        @Html.TextBoxFor(m => m.Nimi, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Kvalifikatsioon, "Kvalifikatsioon")
+        @Html.TextBoxFor(m => m.Kvalifikatsioon, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Email, "E-post")
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email", required = "required" })
+    </div>
+
+    <div class="mb-3">
+        @Html.Label("Parool sisselogimiseks")
+        <input type="password" name="Password" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-success">Loo</button>
+    <a class="btn btn-secondary" href="@Url.Action("Teachers","Admin")">Tühista</a>
+}

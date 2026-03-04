@@ -1,0 +1,40 @@
+﻿@model IEnumerable<KeelteKooli.Models.Training>
+@{
+    ViewBag.Title = "Koolitused";
+}
+
+<h2>Koolitused</h2>
+<p>
+    <a class="btn btn-primary" href="@Url.Action("CreateTraining", "Admin")">Loo uus koolitus</a>
+</p>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Kursus</th>
+            <th>Õpetaja</th>
+            <th>Algus</th>
+            <th>Lõpp</th>
+            <th>Hind</th>
+            <th>Maks. osalejaid</th>
+            <th>Tegevused</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var t in Model)
+        {
+            <tr>
+                <td>@t.Keelekursus.Nimetus</td>
+                <td>@t.Opetaja.Nimi</td>
+                <td>@t.AlgusKuupaev.ToString("dd.MM.yyyy")</td>
+                <td>@t.LoppKuupaev.ToString("dd.MM.yyyy")</td>
+                <td>@t.Hind</td>
+                <td>@t.MaxOsalejaid</td>
+                <td>
+                    <a class="btn btn-sm btn-warning" href="@Url.Action("EditTraining","Admin", new { id = t.Id })">Muuda</a>
+                    <a class="btn btn-sm btn-danger" href="@Url.Action("DeleteTraining","Admin", new { id = t.Id })">Kustuta</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "Avaleht";
+}
+
+<div class="p-4 p-md-5 mb-4 rounded-3 bg-light border">
+    <div class="container-fluid py-2">
+        <h1 class="display-5 fw-bold">Martin Keeltekool</h1>
+        <p class="col-md-9 fs-5 text-muted">
+            Keeleõpe ja koolitused – mugav registreerimine, õpetajad ja kursused ühes kohas.
+        </p>
+
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <div class="d-flex gap-2 flex-wrap mt-3">
+                <a class="btn btn-primary btn-lg" href="@Url.Action("Login","Account")">Logi sisse</a>
+                <a class="btn btn-outline-primary btn-lg" href="@Url.Action("Register","Account")">Registreeru</a>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-success mt-3 mb-0">
+                Oled sisse logitud kui <strong>@User.Identity.Name</strong>.
+            </div>
+        }
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Kursused</h5>
+                <p class="card-text text-muted">Vali sobiv keel ja tase ning alusta õppimist.</p>
+
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <a class="btn btn-sm btn-primary" href="@Url.Action("Courses","Admin")">Halda kursusi</a>
+                }
+                else
+                {
+                    <span class="badge text-bg-secondary">Info</span>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Koolitused</h5>
+                <p class="card-text text-muted">Registreeru koolitusele või vaata oma koolitusi.</p>
+
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Opetaja"))
+                {
+                    <a class="btn btn-sm btn-primary" href="@Url.Action("Dashboard","Opetaja")">Minu töölaud</a>
+                }
+                else if (User.Identity.IsAuthenticated && User.IsInRole("Student"))
+                {
+                    <a class="btn btn-sm btn-primary" href="@Url.Action("MyTrainings","Student")">Minu koolitused</a>
+                }
+                else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <a class="btn btn-sm btn-primary" href="@Url.Action("Trainings","Admin")">Halda koolitusi</a>
+                }
+                else
+                {
+                    <span class="badge text-bg-secondary">Info</span>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Õpetajad</h5>
+                <p class="card-text text-muted">Administraator saab lisada ja hallata õpetajaid.</p>
+
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <a class="btn btn-sm btn-primary" href="@Url.Action("Teachers","Admin")">Halda õpetajaid</a>
+                }
+                else
+                {
+                    <span class="badge text-bg-secondary">Info</span>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 text-muted small">
+    <div>Projekt: ASP.NET Keeltekooli projekt</div>
+    <div>Autor: Martin Rossakov (TARpv24)</div>
+</div>

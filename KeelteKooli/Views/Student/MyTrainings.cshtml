@@ -1,0 +1,46 @@
+﻿@model IEnumerable<KeelteKooli.Models.Registration>
+
+@{
+    ViewBag.Title = "Minu koolitused";
+}
+
+<h2>Minu koolitused</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Sa ei ole veel ühelegi koolitusele registreerunud.</div>
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Kursus</th>
+                <th>Õpetaja</th>
+                <th>Algus</th>
+                <th>Lõpp</th>
+                <th>Staatus</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>
+                        @(r.Koolitus != null && r.Koolitus.Keelekursus != null
+                            ? r.Koolitus.Keelekursus.Nimetus
+                            : "-")
+                    </td>
+                    <td>
+                        @(r.Koolitus != null && r.Koolitus.Opetaja != null
+                            ? r.Koolitus.Opetaja.Nimi
+                            : "-")
+                    </td>
+                    <td>@(r.Koolitus != null ? r.Koolitus.AlgusKuupaev.ToString("dd.MM.yyyy") : "-")</td>
+                    <td>@(r.Koolitus != null ? r.Koolitus.LoppKuupaev.ToString("dd.MM.yyyy") : "-")</td>
+                    <td>@r.Staatus</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

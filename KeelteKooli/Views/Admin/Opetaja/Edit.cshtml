@@ -1,0 +1,36 @@
+﻿@model KeelteKooli.Models.Teacher
+@{
+    ViewBag.Title = "Muuda õpetajat";
+}
+
+<h2>Muuda õpetajat</h2>
+
+@using (Html.BeginForm("EditTeacher", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Nimi, "Nimi")
+        @Html.TextBoxFor(m => m.Nimi, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Kvalifikatsioon, "Kvalifikatsioon")
+        @Html.TextBoxFor(m => m.Kvalifikatsioon, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Email, "E-post")
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email" })
+    </div>
+
+    <div class="mb-3">
+        @Html.Label("Uus parool (valikuline)")
+        <input type="password" name="NewPassword" class="form-control" />
+        <small class="text-muted">Jäta tühjaks, kui sa ei soovi parooli muuta.</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvesta muudatused</button>
+    <a class="btn btn-secondary" href="@Url.Action("Teachers","Admin")">Tühista</a>
+}

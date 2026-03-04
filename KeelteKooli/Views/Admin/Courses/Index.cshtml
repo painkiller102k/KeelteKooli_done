@@ -1,0 +1,36 @@
+﻿@model IEnumerable<KeelteKooli.Models.Course>
+@{
+    ViewBag.Title = "Kursused";
+}
+
+<h2>Kursused</h2>
+<p>
+    <a class="btn btn-primary" href="@Url.Action("CreateCourse", "Admin")">Loo uus kursus</a>
+</p>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Nimetus</th>
+            <th>Keel</th>
+            <th>Tase</th>
+            <th>Kirjeldus</th>
+            <th>Tegevused</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var course in Model)
+        {
+            <tr>
+                <td>@course.Nimetus</td>
+                <td>@course.Keel</td>
+                <td>@course.Tase</td>
+                <td>@course.Kirjeldus</td>
+                <td>
+                    <a class="btn btn-sm btn-warning" href="@Url.Action("EditCourse", "Admin", new { id = course.Id })">Muuda</a>
+                    <a class="btn btn-sm btn-danger" href="@Url.Action("DeleteCourse", "Admin", new { id = course.Id })">Kustuta</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

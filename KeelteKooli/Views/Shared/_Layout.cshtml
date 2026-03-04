@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title - KeelteKooli</title>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+</head>
+<body class="bg-body-tertiary">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-dark-subtle">
+        <div class="container">
+            <a class="navbar-brand fw-semibold" href="@Url.Action("Index","Home")">KeelteKooli</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Menüü">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Index","Home")">Avaleht</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Admin
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminMenu">
+                                    <li><h6 class="dropdown-header">Haldus</h6></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Courses","Admin")">Kursused</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Teachers","Admin")">Õpetajad</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Trainings","Admin")">Koolitused</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Registrations","Admin")">Registreerimised</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else if (User.IsInRole("Opetaja"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="teacherMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Õpetaja
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="teacherMenu">
+                                    <li><h6 class="dropdown-header">Õpetaja töölaud</h6></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Dashboard","Opetaja")">Minu koolitused</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else if (User.IsInRole("Student"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="studentMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Õpilane
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="studentMenu">
+                                    <li><h6 class="dropdown-header">Õpilase menüü</h6></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("MyTrainings","Student")">Minu koolitused</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Trainings","Student")">Kõik koolitused</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                        <li class="nav-item d-none d-lg-block">
+                            <span class="navbar-text text-white-50 small">
+                                @User.Identity.Name
+                            </span>
+                        </li>
+
+                        <li class="nav-item">
+                            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @class = "d-inline" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-outline-light btn-sm">Logi välja</button>
+                            }
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="btn btn-outline-light btn-sm" href="@Url.Action("Login","Account")">Logi sisse</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-primary btn-sm" href="@Url.Action("Register","Account")">Registreeru</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        @RenderBody()
+    </main>
+
+    <footer class="border-top bg-white">
+        <div class="container py-3 d-flex flex-wrap justify-content-between align-items-center">
+            <div class="text-muted small">
+                &copy; @DateTime.Now.Year - KeelteKooli
+            </div>
+            <div class="text-muted small">
+                <span class="me-2">Kontakt:</span>
+                <span>info@keeltekooli.ee</span>
+            </div>
+        </div>
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

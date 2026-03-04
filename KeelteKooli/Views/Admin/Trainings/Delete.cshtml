@@ -1,0 +1,37 @@
+﻿@model KeelteKooli.Models.Training
+@{
+    ViewBag.Title = "Kustuta koolitus";
+}
+
+<h2>Kustuta koolitus</h2>
+
+<p>Kas oled kindel, et soovid selle koolituse kustutada?</p>
+
+<dl class="row">
+    <dt class="col-sm-3">Kursus</dt>
+    <dd class="col-sm-9">@(Model.Keelekursus != null ? Model.Keelekursus.Nimetus : "-")</dd>
+
+    <dt class="col-sm-3">Õpetaja</dt>
+    <dd class="col-sm-9">@(Model.Opetaja != null ? Model.Opetaja.Nimi : "-")</dd>
+
+    <dt class="col-sm-3">Alguskuupäev</dt>
+    <dd class="col-sm-9">@Model.AlgusKuupaev.ToString("dd.MM.yyyy")</dd>
+
+    <dt class="col-sm-3">Lõppkuupäev</dt>
+    <dd class="col-sm-9">@Model.LoppKuupaev.ToString("dd.MM.yyyy")</dd>
+
+    <dt class="col-sm-3">Hind</dt>
+    <dd class="col-sm-9">@Model.Hind</dd>
+
+    <dt class="col-sm-3">Maks. osalejaid</dt>
+    <dd class="col-sm-9">@Model.MaxOsalejaid</dd>
+</dl>
+
+@using (Html.BeginForm("DeleteTraining", "Admin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+
+    <button type="submit" class="btn btn-danger">Kustuta</button>
+    <a class="btn btn-secondary" href="@Url.Action("Trainings", "Admin")">Tühista</a>
+}
