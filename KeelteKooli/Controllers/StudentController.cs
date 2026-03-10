@@ -1,9 +1,8 @@
 ﻿using KeelteKooli.Models;
 using Microsoft.AspNet.Identity;
-using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 
 namespace KeelteKooli.Controllers
@@ -13,7 +12,6 @@ namespace KeelteKooli.Controllers
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
 
-        // Все тренинги (можно записаться)
         public ActionResult Trainings()
         {
             var userId = User.Identity.GetUserId();
@@ -24,18 +22,24 @@ namespace KeelteKooli.Controllers
                 .OrderByDescending(t => t.AlgusKuupaev)
                 .ToList();
 
-            // чтобы в View знать, на что уже записан
             var myIds = db.Registrations
                 .Where(r => r.UserId == userId)
                 .Select(r => r.KoolitusId)
                 .ToList();
 
+            var counts = db.Registrations
+                .Where(r => r.Staatus != "Tühistatud")
+                .GroupBy(r => r.KoolitusId)
+                .Select(g => new { KoolitusId = g.Key, Cnt = g.Count() })
+                .ToList()
+                .ToDictionary(x => x.KoolitusId, x => x.Cnt);
+
             ViewBag.MyTrainingIds = myIds;
+            ViewBag.Counts = counts;
 
             return View("~/Views/Student/Trainings.cshtml", trainings);
         }
 
-        // Записаться на тренинг
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Enroll(int id) // id = Training.Id
@@ -45,23 +49,34 @@ namespace KeelteKooli.Controllers
             var training = db.Trainings.Find(id);
             if (training == null) return HttpNotFound();
 
-            // чтобы не было дублей
             bool already = db.Registrations.Any(r => r.UserId == userId && r.KoolitusId == id);
-            if (!already)
+            if (already)
             {
-                db.Registrations.Add(new Registration
-                {
-                    UserId = userId,
-                    KoolitusId = id,
-                    Staatus = "Ootel"
-                });
-                db.SaveChanges();
+                TempData["Error"] = "Sa oled juba sellele koolitusele registreeritud.";
+                return RedirectToAction("Trainings");
             }
 
+            // проверка заполненности группы
+            int used = db.Registrations.Count(r => r.KoolitusId == id && r.Staatus != "Tühistatud"); // training 
+            if (used >= training.MaxOsalejaid)
+            {
+                TempData["Error"] = "Vabandust, grupp on täis. Registreeruda ei saa.";
+                return RedirectToAction("Trainings");
+            }
+
+            db.Registrations.Add(new Registration
+            {
+                UserId = userId,
+                KoolitusId = id,
+                Staatus = "Ootel"
+            });
+            db.SaveChanges();
+
+            TempData["Message"] = "Registreerimine lisatud (staatus: Ootel).";
             return RedirectToAction("Trainings");
         }
 
-        // Мои тренинги (статус: Ootel/Kinnitatud/Tühistatud)
+        //Ootel/Kinnitatud/Tühistatud)
         public ActionResult MyTrainings()
         {
             var userId = User.Identity.GetUserId();
@@ -78,7 +93,7 @@ namespace KeelteKooli.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing) db.Dispose();
+            if (disposing) db.Dispose();    
             base.Dispose(disposing);
         }
     }

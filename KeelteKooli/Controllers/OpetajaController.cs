@@ -12,7 +12,6 @@ namespace KeelteKooli.Controllers
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
 
-        // Dashboard преподавателя: список его тренингов
         public ActionResult Dashboard()
         {
             var userId = User.Identity.GetUserId();
@@ -29,7 +28,6 @@ namespace KeelteKooli.Controllers
             return View("~/Views/Admin/Opetaja/Dashboard.cshtml", trainings);
         }
 
-        // Студенты конкретного тренинга (только если тренинг принадлежит этому учителю)
         public ActionResult Students(int? id) // <-- nullable
         {
             if (id == null)
@@ -40,7 +38,6 @@ namespace KeelteKooli.Controllers
             var teacher = db.Teachers.FirstOrDefault(t => t.ApplicationUserId == userId);
             if (teacher == null) return HttpNotFound();
 
-            // проверка доступа: тренинг должен принадлежать этому учителю
             var training = db.Trainings
                 .Include(t => t.Keelekursus)
                 .FirstOrDefault(t => t.Id == id.Value && t.OpetajaId == teacher.Id);

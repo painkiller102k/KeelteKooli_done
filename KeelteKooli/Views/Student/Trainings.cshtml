@@ -3,10 +3,21 @@
 
 @{
     ViewBag.Title = "Kõik koolitused";
+
     var myIds = ViewBag.MyTrainingIds as List<int> ?? new List<int>();
+    var counts = ViewBag.Counts as Dictionary<int, int> ?? new Dictionary<int, int>();
 }
 
 <h2>Kõik koolitused</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
 
 <table class="table table-striped table-bordered">
     <thead>
@@ -16,6 +27,7 @@
             <th>Algus</th>
             <th>Lõpp</th>
             <th>Hind</th>
+            <th>Kohad</th>
             <th>Tegevus</th>
         </tr>
     </thead>
@@ -23,6 +35,8 @@
         @foreach (var t in Model)
         {
             var already = myIds.Contains(t.Id);
+            var used = counts.ContainsKey(t.Id) ? counts[t.Id] : 0;
+            var isFull = used >= t.MaxOsalejaid;
 
             <tr>
                 <td>@(t.Keelekursus != null ? t.Keelekursus.Nimetus : "-")</td>
@@ -30,8 +44,13 @@
                 <td>@t.AlgusKuupaev.ToString("dd.MM.yyyy")</td>
                 <td>@t.LoppKuupaev.ToString("dd.MM.yyyy")</td>
                 <td>@t.Hind</td>
+                <td>@used / @t.MaxOsalejaid</td>
                 <td>
-                    @if (already)
+                    @if (isFull)
+                    {
+                        <span class="badge text-bg-danger">GRUPP TÄIS</span>
+                    }
+                    else if (already)
                     {
                         <span class="badge text-bg-success">Registreeritud</span>
                     }

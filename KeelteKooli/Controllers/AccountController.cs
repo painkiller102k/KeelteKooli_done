@@ -63,11 +63,9 @@ namespace KeelteKooli.Controllers
 
             if (result == SignInStatus.Success)
             {
-                // если был returnUrl — уважаем его
                 if (Url.IsLocalUrl(returnUrl))
                     return Redirect(returnUrl);
 
-                // иначе отправляем по роли
                 return RedirectToRoleHome();
             }
 
@@ -94,7 +92,6 @@ namespace KeelteKooli.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            // гарантируем наличие роли Student (и остальных можно добавить при желании)
             await EnsureRoleExistsAsync("Student");
 
             var user = new ApplicationUser
@@ -146,7 +143,6 @@ namespace KeelteKooli.Controllers
 
         private async Task EnsureRoleExistsAsync(string roleName)
         {
-            // используем тот же DbContext, что и UserManager
             var context = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
 

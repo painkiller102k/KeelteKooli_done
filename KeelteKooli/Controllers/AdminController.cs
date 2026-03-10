@@ -110,8 +110,7 @@ namespace KeelteKooli.Controllers
             if (!ModelState.IsValid)
                 return View("Opetaja/Create", teacher);
 
-            // создаём Identity user
-            var newUser = new ApplicationUser
+            var newUser = new ApplicationUser // edentity user
             {
                 UserName = teacher.Email,
                 Email = teacher.Email
@@ -124,10 +123,8 @@ namespace KeelteKooli.Controllers
                 return View("Opetaja/Create", teacher);
             }
 
-            // роль учителя
-            UserManager.AddToRole(newUser.Id, "Opetaja");
+            UserManager.AddToRole(newUser.Id, "Opetaja"); // opetaja role
 
-            // сохраняем teacher + связь с ApplicationUser
             teacher.ApplicationUserId = newUser.Id;
             db.Teachers.Add(teacher);
             db.SaveChanges();
@@ -145,7 +142,6 @@ namespace KeelteKooli.Controllers
             return View("Opetaja/Edit", teacher);
         }
 
-        // ⚠️ Пароль меняем без токенов: RemovePassword + AddPassword
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditTeacher(Teacher teacher, string NewPassword)
@@ -159,12 +155,10 @@ namespace KeelteKooli.Controllers
             var dbTeacher = db.Teachers.Find(teacher.Id);
             if (dbTeacher == null) return HttpNotFound();
 
-            // обновляем данные teacher
             dbTeacher.Nimi = teacher.Nimi;
             dbTeacher.Kvalifikatsioon = teacher.Kvalifikatsioon;
             dbTeacher.Email = teacher.Email;
 
-            // обновляем Identity user
             if (!string.IsNullOrEmpty(dbTeacher.ApplicationUserId))
             {
                 var user = UserManager.FindById(dbTeacher.ApplicationUserId);
@@ -180,10 +174,8 @@ namespace KeelteKooli.Controllers
                         return View("Opetaja/Edit", teacher);
                     }
 
-                    // если ввели новый пароль — меняем
                     if (!string.IsNullOrWhiteSpace(NewPassword))
                     {
-                        // снимаем старый, ставим новый (без TokenProvider)
                         if (UserManager.HasPassword(user.Id))
                         {
                             var rem = UserManager.RemovePassword(user.Id);
@@ -225,21 +217,17 @@ namespace KeelteKooli.Controllers
             var teacher = db.Teachers.Find(id);
             if (teacher == null) return HttpNotFound();
 
-            // удалить trainings этого учителя
             var trainings = db.Trainings.Where(t => t.OpetajaId == teacher.Id).ToList();
             if (trainings.Any())
                 db.Trainings.RemoveRange(trainings);
 
-            // удалить registrations на этих trainings (чтобы не было FK ошибок)
             var regToDelete = db.Registrations.Where(r => r.Koolitus.OpetajaId == teacher.Id).ToList();
             if (regToDelete.Any())
                 db.Registrations.RemoveRange(regToDelete);
 
-            // удалить Teacher
             db.Teachers.Remove(teacher);
             db.SaveChanges();
 
-            // удалить Identity user корректно (через UserManager, найденный заново)
             if (!string.IsNullOrEmpty(teacher.ApplicationUserId))
             {
                 var user = UserManager.FindById(teacher.ApplicationUserId);
@@ -336,7 +324,6 @@ namespace KeelteKooli.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteTrainingConfirmed(int id)
         {
-            // удалить registrations этого тренинга (иначе FK ошибка)
             var regs = db.Registrations.Where(r => r.KoolitusId == id).ToList();
             if (regs.Any())
                 db.Registrations.RemoveRange(regs);
@@ -381,7 +368,7 @@ namespace KeelteKooli.Controllers
             var reg = db.Registrations.Find(id);
             if (reg == null) return HttpNotFound();
 
-            reg.Staatus = "Tühistatud";
+            reg.Staatus = "Tühistatud"; // 
             db.SaveChanges();
             return RedirectToAction(nameof(Registrations));
         }

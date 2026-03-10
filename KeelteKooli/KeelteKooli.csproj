@@ -186,10 +186,6 @@
     <Compile Include="Migrations\202602191315238_AddEmailToTeacher.Designer.cs">
       <DependentUpon>202602191315238_AddEmailToTeacher.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202603041222335_InitialCreatee.cs" />
-    <Compile Include="Migrations\202603041222335_InitialCreatee.Designer.cs">
-      <DependentUpon>202603041222335_InitialCreatee.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Course.cs" />
@@ -327,9 +323,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202602191315238_AddEmailToTeacher.resx">
       <DependentUpon>202602191315238_AddEmailToTeacher.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202603041222335_InitialCreatee.resx">
-      <DependentUpon>202603041222335_InitialCreatee.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
