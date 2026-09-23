@@ -7,6 +7,9 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Data.Entity;
+using TARpv24_KeelteKool_XUnitTesting.Macros;
+using TARpv24_KeelteKool_XUnitTesting.Mock;
 
 namespace TARpv24_KeelteKool_XUnitTesting
 {
@@ -32,7 +35,7 @@ namespace TARpv24_KeelteKool_XUnitTesting
             services.AddScoped<StudentController>();
             services.AddScoped<IHostEnvironment, MockIHostEnvironment>();
 
-            services.AddDbContext<IdentityConfig>(x =>
+            services.AddDbContext<ApplicationDbContext>(x =>
             {
                 x.UseInMemoryDatabase("TEST");
                 x.ConfigureWarnings(b =>
@@ -58,6 +61,12 @@ namespace TARpv24_KeelteKool_XUnitTesting
         {
             return serviceProvider.GetService<T>();
         }
+        /// <summary>
+        /// Registreerib macrides teenusied kui nad ei ole liidesed ja ei ole abstraktsed
+        /// On vaja test setupide seadistuseks
+        /// Makro ----> Teenus
+        /// </summary>
+        /// <param name="services">Teenused, siia lisatakse makrodest muid teenuseid</param>
 
         private void RegisterMacros(ServiceCollection services)
         {
