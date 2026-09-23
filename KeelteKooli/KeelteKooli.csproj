@@ -186,6 +186,14 @@
     <Compile Include="Migrations\202602191315238_AddEmailToTeacher.Designer.cs">
       <DependentUpon>202602191315238_AddEmailToTeacher.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202609100805471_Initialasdsa.cs" />
+    <Compile Include="Migrations\202609100805471_Initialasdsa.Designer.cs">
+      <DependentUpon>202609100805471_Initialasdsa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202609160658426_testupdate.cs" />
+    <Compile Include="Migrations\202609160658426_testupdate.Designer.cs">
+      <DependentUpon>202609160658426_testupdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Course.cs" />
@@ -323,6 +331,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202602191315238_AddEmailToTeacher.resx">
       <DependentUpon>202602191315238_AddEmailToTeacher.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202609100805471_Initialasdsa.resx">
+      <DependentUpon>202609100805471_Initialasdsa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202609160658426_testupdate.resx">
+      <DependentUpon>202609160658426_testupdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
